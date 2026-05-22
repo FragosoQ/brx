@@ -1,0 +1,6 @@
+node_modules
+dist
+dist-ssr
+*.local
+.shadow-cljs
+.cljs_node_repl
