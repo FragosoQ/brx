@@ -17,7 +17,7 @@ const SPOTS_DATA = {
   8: { id: 8, name: "Woodpecker Parc Royal", category: "food", visitTime: 50, price: "€€", address: "Parc de Bruxelles, 1000 Bruxelles", tip: "Peça uma das famosas waffles salgadas com ovo ou um iced coffee e sente-se nas espreguiçadeiras.", desc: "Quiosque muito popular no coração do Parque de Bruxelas, ideal para um pequeno-almoço tardio ou lanche.", lat: 62, lng: 53 },
   9: { id: 9, name: "Catedral de São Miguel e Santa Gudula", category: "culture", visitTime: 40, price: "Grátis", address: "Place Sainte-Gudule, 1000 Bruxelles", tip: "Pode visitar a cripta românica subterrânea por um pequeno custo adicional (cerca de 3€).", desc: "Majestosa catedral gótica nacional que remonta ao século XI, com imponentes torres gémeas.", lat: 55, lng: 47 },
   10: { id: 10, name: "Delirium Café", category: "drink", visitTime: 60, price: "€€", address: "Impasse de la Fidélité 4, 1000 Bruxelles", tip: "Fica numa ruela estreita mesmo em frente à Jeanneke Pis. O bar subterrâneo tem a maior carta de cervejas.", desc: "O bar mais lendário da Bélgica, no Livro do Guinness pela sua coleção com mais de 2.000 variedades de cervejas.", lat: 50, lng: 47 },
-  11: { id: 11, name: "Maison Hannon", category: "culture", visitTime: 60, price: "€10 - €12", address: "Avenue de la Jonction 1, 1060 Saint-Gilles", tip: "Compre o bilhete online com antecedência, pois o espaço é pequeno e as entradas por hora são controladas.", desc: "Uma das obras-primas da Art Nouveau de Bruxelas, construída em 1903 e convertida num lindíssimo museu.", lat: 40, lng: 85 },
+  11: { id: 11, name: "Maison Hannon", category: "culture", visitTime: 60, price: "€10 - €12", address: "Avenue de la Jonction 1, 1060 Saint-Gilles", tip: "Compre o bilhete online com antecedência, pois o espaço é pequeno e as entradas por hora são controladas.", desc: "Uma das obras-primas da Art Nouveau de Bruxelas, construída in 1903 e convertida num lindíssimo museu.", lat: 40, lng: 85 },
   12: { id: 12, name: "De Munt/La Monnaie", category: "culture", visitTime: 20, price: "Grátis (Exterior)", address: "Place de la Monnaie, 1000 Bruxelles", tip: "A praça em frente é um ponto habitual de músicos de rua. Foi aqui que se despoletou a revolução de 1830.", desc: "A prestigiada Ópera Nacional da Bélgica. Um edifício neoclássico de grande importância histórica.", lat: 49, lng: 44 },
   13: { id: 13, name: "Botanique", category: "culture", visitTime: 45, price: "€€", address: "Rue Royale 236, 1210 Saint-Josse-ten-Noode", tip: "O Botanique é hoje um dos centros de concertos alternativos e exposições de fotografia mais conceituados.", desc: "Antigo complexo de estufas do Jardim Botânico Real, reconvertido num dinâmico centro cultural.", lat: 63, lng: 35 },
   14: { id: 14, name: "Gare Maritime", category: "views", visitTime: 60, price: "Grátis", address: "Rue de Picardie 7, 1080 Molenbeek-Saint-Jean", tip: "Tem uma arquitetura de madeira espetacular e jardins interiores que funcionam como um ecossistema sustentável.", desc: "Uma monumental e antiga estação ferroviária de mercadorias restaurada de forma sustentável de Tour & Taxis.", lat: 35, lng: 25 },
@@ -87,6 +87,33 @@ function addMinutesToTime(timeStr, minsToAdd) {
   const newMins = totalMins % 60;
   return `${String(newHours).padStart(2, '0')}:${String(newMins).padStart(2, '0')}`;
 }
+
+const getCategoryColor = (category) => {
+  switch (category) {
+    case 'food': return 'bg-amber-100 text-amber-800 border-amber-300';
+    case 'drink': return 'bg-emerald-100 text-emerald-800 border-emerald-300';
+    case 'views': return 'bg-purple-100 text-purple-800 border-purple-300';
+    default: return 'bg-blue-100 text-blue-800 border-blue-300';
+  }
+};
+
+const getCategoryName = (category) => {
+  switch (category) {
+    case 'food': return 'Gastronomia';
+    case 'drink': return 'Cerveja & Rooftops';
+    case 'views': return 'Vistas & Pontos de Interesse';
+    default: return 'Cultura & Arquitetura';
+  }
+};
+
+const getCategoryIcon = (category) => {
+  switch (category) {
+    case 'food': return <Utensils className="w-5 h-5" />;
+    case 'drink': return <Beer className="w-5 h-5" />;
+    case 'views': return <Camera className="w-5 h-5" />;
+    default: return <Compass className="w-5 h-5" />;
+  }
+};
 
 export default function App() {
   const [activeDayIndex, setActiveDayIndex] = useState(0);
@@ -218,7 +245,7 @@ export default function App() {
                       <span className="text-3xs opacity-80 uppercase font-black block">Dia {index + 1}</span>
                       <span className="font-extrabold text-base">{dayData.day}</span>
                       <span className="text-3xs block opacity-90">
-                        {dayData.day === "Domingo" ? "09:00 - 14:00 (Fim Limite)" : `Partida: \${dayData.startTime}h`}
+                        {dayData.day === "Domingo" ? "09:00 - 14:00 (Fim Limite)" : `Partida: ${dayData.startTime}h`}
                       </span>
                     </div>
                     <span className="text-xs px-2 py-1 rounded-full bg-black/10 font-bold">{activeCount} ativos</span>
@@ -237,7 +264,7 @@ export default function App() {
                   <button
                     key={mode}
                     onClick={() => setTravelMode(mode)}
-                    className={`flex flex-col items-center p-3 rounded-xl border transition-all text-center \${
+                    className={`flex flex-col items-center p-3 rounded-xl border transition-all text-center ${
                       isSelected ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 font-bold' : 'border-slate-100 hover:bg-slate-50'
                     }`}
                   >
@@ -325,7 +352,7 @@ export default function App() {
                       <div className="flex items-start gap-4 relative z-10 p-4 rounded-xl border border-slate-100 bg-white">
                         <button 
                           onClick={() => toggleVisited(step.to.id)}
-                          className={`w-12 h-12 rounded-full border-2 flex flex-col items-center justify-center shrink-0 \${isCompleted ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-slate-50 text-slate-500'}`}
+                          className={`w-12 h-12 rounded-full border-2 flex flex-col items-center justify-center shrink-0 ${isCompleted ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-slate-50 text-slate-500'}`}
                         >
                           {isCompleted ? "✓" : index + 1}
                         </button>
@@ -355,7 +382,133 @@ export default function App() {
               </div>
             )}
           </div>
+
+          {/* Secção de Arquivados */}
+          {archivedSpotsForDay.length > 0 && (
+            <div className="bg-slate-100 border border-slate-200 rounded-2xl p-5 space-y-3">
+              <h4 className="text-xs font-black uppercase text-slate-500">Atividades Arquivadas ({archivedSpotsForDay.length})</h4>
+              <p className="text-3xs text-slate-500 leading-relaxed">Estas atividades foram omitidas da rota activa. Pode restaurá-las para que o cronograma se ajuste automaticamente.</p>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {archivedSpotsForDay.map(id => {
+                  const spot = SPOTS_DATA[id];
+                  if (!spot) return null;
+                  return (
+                    <div key={spot.id} className="bg-white p-3 rounded-xl border border-slate-200 flex items-center justify-between gap-2 shadow-2xs">
+                      <span className="font-bold text-xs truncate text-slate-700">{spot.name}</span>
+                      <button 
+                        onClick={() => toggleArchived(spot.id)}
+                        className="text-indigo-600 hover:text-indigo-800 bg-indigo-50 hover:bg-indigo-100 text-3xs font-black px-2.5 py-1 rounded-lg transition-all shrink-0"
+                      >
+                        Restaurar
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
       </main>
+
+      {/* Janela Modal de Detalhes Adicionada para o Funcionamento de "Detalhes" */}
+      {selectedSpot && (
+        <div className="fixed inset-0 bg-slate-950/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 overflow-y-auto">
+          <div 
+            className="bg-white rounded-3xl max-w-lg w-full shadow-2xl overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Cabeçalho do Modal */}
+            <div className="bg-gradient-to-r from-blue-900 to-indigo-950 p-6 text-white relative">
+              <button 
+                onClick={() => setSelectedSpot(null)}
+                className="absolute top-4 right-4 bg-white/10 hover:bg-white/20 text-white rounded-full p-2 transition-all font-bold"
+              >
+                <X className="w-4 h-4" />
+              </button>
+              <div className="flex items-center gap-1.5">
+                <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase border ${getCategoryColor(selectedSpot.category)}`}>
+                  {getCategoryName(selectedSpot.category)}
+                </span>
+                <span className="bg-amber-400 text-slate-950 text-[10px] font-black px-2.5 py-1 rounded-full uppercase tracking-wider">
+                  Spot #{selectedSpot.id}
+                </span>
+              </div>
+              <h3 className="text-xl font-black mt-3 leading-tight flex items-center gap-2">
+                {getCategoryIcon(selectedSpot.category)}
+                {selectedSpot.name}
+              </h3>
+            </div>
+
+            {/* Conteúdo do Modal */}
+            <div className="p-6 space-y-5 overflow-y-auto flex-1">
+              <div>
+                <h4 className="text-3xs font-bold uppercase text-slate-400">Descrição</h4>
+                <p className="text-slate-700 text-sm mt-1 leading-relaxed">{selectedSpot.desc}</p>
+              </div>
+
+              <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
+                <Sparkles className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
+                <div>
+                  <h5 className="font-bold text-amber-900 text-xs uppercase">Dica Prática</h5>
+                  <p className="text-amber-950 text-xs mt-0.5">{selectedSpot.tip}</p>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 text-xs">
+                <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 flex flex-col justify-between">
+                  <span className="text-3xs font-bold text-slate-400 uppercase flex items-center gap-1">
+                    <MapPin className="w-3 h-3 text-indigo-500" /> Endereço
+                  </span>
+                  <p className="font-bold text-slate-800 mt-1.5 leading-tight">{selectedSpot.address}</p>
+                </div>
+                <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 flex flex-col justify-between">
+                  <span className="text-3xs font-bold text-slate-400 uppercase flex items-center gap-1">
+                    <DollarSign className="w-3 h-3 text-indigo-500" /> Preço
+                  </span>
+                  <p className="font-bold text-slate-800 mt-1.5 leading-tight">{selectedSpot.price}</p>
+                </div>
+                <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 flex flex-col justify-between">
+                  <span className="text-3xs font-bold text-slate-400 uppercase flex items-center gap-1">
+                    <Clock className="w-3 h-3 text-indigo-500" /> Permanência
+                  </span>
+                  <p className="font-bold text-slate-800 mt-1.5 leading-tight">{selectedSpot.visitTime} minutos</p>
+                </div>
+                <div className="bg-slate-50 border border-slate-100 rounded-xl p-3 flex flex-col justify-between">
+                  <span className="text-3xs font-bold text-slate-400 uppercase flex items-center gap-1">
+                    <CheckCircle2 className="w-3 h-3 text-indigo-500" /> Estado
+                  </span>
+                  <button 
+                    onClick={() => toggleVisited(selectedSpot.id)}
+                    className={`mt-1 text-3xs font-bold py-1 px-2 rounded ${visitedSpots[selectedSpot.id] ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' : 'bg-white border border-slate-200'}`}
+                  >
+                    {visitedSpots[selectedSpot.id] ? 'Concluído' : 'Por Visitar'}
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Rodapé do Modal */}
+            <div className="bg-slate-50 p-5 border-t border-slate-100 flex gap-3">
+              <a 
+                href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(selectedSpot.name + ", " + selectedSpot.address)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-3 px-4 rounded-xl shadow-md text-center flex items-center justify-center gap-1.5"
+              >
+                <ExternalLink className="w-3.5 h-3.5" />
+                <span>Abrir no Google Maps</span>
+              </a>
+              <button 
+                onClick={() => toggleArchived(selectedSpot.id)}
+                className="bg-rose-50 hover:bg-rose-100 border border-rose-200 text-rose-700 text-xs font-bold px-4 py-3 rounded-xl flex items-center gap-1"
+              >
+                <Archive className="w-3.5 h-3.5 text-rose-600" />
+                <span>Arquivar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
+}
