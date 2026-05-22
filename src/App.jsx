@@ -9,7 +9,7 @@ import {
 const SPOTS_DATA = {
   1: { id: 1, name: "The BeerLab Rooftop", category: "drink", visitTime: 60, price: "€€", address: "Rue de l'Ecuyer 50, 1000 Bruxelles", tip: "Experimente a tábua de degustação de cervejas artesanais belgas. O espaço é aquecido no inverno.", desc: "Rooftop moderno com uma excelente seleção de cervejas artesanais belgas e vista panorâmica sobre o centro histórico.", lat: 53, lng: 49 },
   2: { id: 2, name: "Secret Rooftop By Warwick", category: "drink", visitTime: 60, price: "€€€", address: "Rue Duquesnoy 5, 1000 Bruxelles (Warwick)", tip: "Tem uma das melhores perspectivas aéreas da torre da Grand Place iluminada. Ideal para cocktails de assinatura.", desc: "Rooftop exclusivo e sofisticado situado no topo do conceituado Hotel Warwick, a poucos passos da Grand Place.", lat: 52, lng: 51 },
-  3: { id: 3, name: "Rooftop 58", category: "views", visitTime: 40, price: "Grátis", address: "Rue de l'Evêque 1, 1000 Bruxelles (Brucity)", tip: "A entrada no terraço público é gratuita! Suba diretamente pelos elevadores dedicados no lobby principal.", desc: "O maior terraço público e jardim panorâmico suspenso de Bruxelas, com uma deslumbrante vista de 360 graus.", lat: 48, lng: 42 },
+  3: { id: 3, name: "Rooftop 58", category: "views", visitTime: 40, price: "Grátis", address: "Rue de l'Evêque 1, 1000 Bruxelles (Brucity)", tip: "A entrada no terraço público é gratuita! Suba diretamente pelos elevadores dedicados no lobby principal.", desc: "O maior terraço público e jardim panorâmico sussegado de Bruxelas, com uma deslumbrante vista de 360 graus.", lat: 48, lng: 42 },
   4: { id: 4, name: "WOLF Sharing Food Market 🐺", category: "food", visitTime: 75, price: "€€", address: "Rue de Fossé aux Loups 50, 1000 Bruxelles", tip: "Há opções de sushi, massas, waffles, comida síria e uma microcervejaria própria no centro do mercado.", desc: "Mercado gastronómico moderno com 17 bancas de comida internacional vibrantes, focado na sustentabilidade.", lat: 49, lng: 40 },
   5: { id: 5, name: "Fresque Dinosaure", category: "culture", visitTime: 15, price: "Grátis", address: "Rue du Chêne, 1000 Bruxelles", tip: "Este fresco fica muito perto do Manneken Pis, sendo ótimo para combinar as duas visitas.", desc: "Um dos murais de banda desenhada de Bruxelas, prestando homenagem à paleontologia e aos dinossauros.", lat: 43, lng: 47 },
   6: { id: 6, name: "Église Notre-Dame des Victoires au Sablon", category: "culture", visitTime: 35, price: "Grátis", address: "Rue de la Régence 3b, 1000 Bruxelles", tip: "Repare nos vitrais monumentais que chegam a ter 14 metros de altura. A entrada é livre.", desc: "Uma deslumbrante igreja gótica do século XV, famosa pela sua arquitetura exterior ornamentada no prestigiado Sablon.", lat: 54, lng: 63 },
@@ -70,7 +70,7 @@ const TRANSIT_ROUTES = {
     0: { type: "Metro", line: "6", label: "Metro Linha 6", code: "M6", color: "bg-blue-600", desc: "A pé até Gare Centrale, Metro Linha 1/5 até Arts-Loi, depois Linha 6 até Simonis." },
     1: { type: "Metro", line: "6", label: "Metro Linha 6", code: "M6", color: "bg-blue-600", desc: "Embarque em Simonis ➡️ Saia na estação Heysel (perto do Atomium)." },
     2: { type: "Autocarro", line: "88", label: "Autocarro STIB 88", code: "B88", color: "bg-red-600", desc: "Apanhe na paragem 'Heysel' ➡️ Saia na paragem 'Tour & Taxis' (Gare Maritime)." },
-    3: { type: "A pé", line: "Pedonal", label: "Caminhada no complexo", code: "WALK", color: "bg-slate-500", desc: "Caminhe curta de 2 minutos dentro do complexo até ao restaurante." }
+    3: { type: "A pé", line: "Pedonal", label: "Caminhada no complexo", code: "WALK", color: "bg-slate-500", desc: "Caminha curta de 2 minutos dentro do complexo até ao restaurante." }
   }
 };
 
@@ -218,7 +218,7 @@ export default function App() {
                       <span className="text-3xs opacity-80 uppercase font-black block">Dia {index + 1}</span>
                       <span className="font-extrabold text-base">{dayData.day}</span>
                       <span className="text-3xs block opacity-90">
-                        {dayData.day === "Domingo" ? "09:00 - 14:00 (Fim Limite)" : `Partida: ${dayData.startTime}h`}
+                        {dayData.day === "Domingo" ? "09:00 - 14:00 (Fim Limite)" : `Partida: \${dayData.startTime}h`}
                       </span>
                     </div>
                     <span className="text-xs px-2 py-1 rounded-full bg-black/10 font-bold">{activeCount} ativos</span>
@@ -237,7 +237,7 @@ export default function App() {
                   <button
                     key={mode}
                     onClick={() => setTravelMode(mode)}
-                    className={`flex flex-col items-center p-3 rounded-xl border transition-all text-center ${
+                    className={`flex flex-col items-center p-3 rounded-xl border transition-all text-center \${
                       isSelected ? 'border-indigo-600 bg-indigo-50/50 text-indigo-700 font-bold' : 'border-slate-100 hover:bg-slate-50'
                     }`}
                   >
@@ -261,6 +261,11 @@ export default function App() {
                 <p className="text-xl font-black text-amber-300 mt-1">{activeSpotsForDay.length > 0 ? routeStats.endTime : activeDay.startTime}</p>
               </div>
             </div>
+            {activeDay.day === "Domingo" && activeSpotsForDay.length > 0 && (
+              <div className="bg-rose-500/10 border border-rose-500/20 rounded-xl p-3 text-2xs text-rose-300">
+                ⚠️ Ajustado para terminar às <strong>{routeStats.endTime}</strong>, respeitando o seu limite das 14:00.
+              </div>
+            )}
           </div>
         </div>
 
@@ -281,7 +286,7 @@ export default function App() {
             {activeSpotsForDay.length === 0 ? (
               <div className="text-center py-12 text-slate-400">
                 <span className="text-4xl block">📭</span>
-                <p className="font-bold mt-2">Nenhuma atividade ativa hoje.</p>
+                <p className="font-bold mt-2">Nenhuma atividade activa hoje.</p>
               </div>
             ) : (
               <div className="space-y-6 relative before:absolute before:inset-0 before:left-6 before:right-auto before:w-0.5 before:bg-slate-100 before:h-[95%] before:my-auto">
@@ -320,7 +325,7 @@ export default function App() {
                       <div className="flex items-start gap-4 relative z-10 p-4 rounded-xl border border-slate-100 bg-white">
                         <button 
                           onClick={() => toggleVisited(step.to.id)}
-                          className={`w-12 h-12 rounded-full border-2 flex flex-col items-center justify-center shrink-0 ${isCompleted ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-slate-50 text-slate-500'}`}
+                          className={`w-12 h-12 rounded-full border-2 flex flex-col items-center justify-center shrink-0 \${isCompleted ? 'bg-emerald-500 text-white border-emerald-600' : 'bg-slate-50 text-slate-500'}`}
                         >
                           {isCompleted ? "✓" : index + 1}
                         </button>
@@ -354,4 +359,3 @@ export default function App() {
       </main>
     </div>
   );
-}
